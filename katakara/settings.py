@@ -57,6 +57,10 @@ INSTALLED_APPS += [
     'allauth.socialaccount',
     'cloudinary',
     'cloudinary_storage',
+    'products',
+    'cart',
+    'orders',
+    'payment',
 ]
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -140,8 +144,13 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+
+ACCOUNT_SIGNUP_FIELDS = [
+    'username*',
+    'email*',
+    'password1*',
+    'password2*',
+]
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),

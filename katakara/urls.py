@@ -26,4 +26,10 @@ urlpatterns = [
     # Registration
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/accounts/', include('accounts.urls')),
+
+    # Products endpoint
+    path('api/products/', include('products.urls')),
+
+    # Cart endpoint
+    path('api/cart/', include('cart.urls')),
 ]
