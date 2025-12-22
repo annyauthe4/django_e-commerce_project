@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from products.models import Product
 from .models import Cart, CartItem
 from .serializers import CartItemSerializer
+from rest_framework import status
 
 class CartView(APIView):
     permission_classes = [IsAuthenticated]
@@ -29,3 +30,47 @@ class CartView(APIView):
             item.save()
 
         return Response({"message": "Added to cart"})
+
+
+    def patch(self, request, pk):
+        try:
+            item = CartItem.objects.get(pk=pk, user=request.user)
+        except CartItem.DoesNotExist:
+            return Response(
+                {"error": "Cart item not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        qty_change = int(request.data.get("quantity", 0))
+        item.quantity += qty_change
+
+        if item.quantity < 1:
+            item.delete()
+            return Response(
+                {"message": "Cart Item removed"},
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        item.save()
+        return Response(
+            {"message": "Quantity updated", "quantity": item.quantity},
+            status=status.HTTP_200_OK
+        )
+
+
+    def delete(self, request, pk):
+        try:
+            cart_item = CartItem.objects.get(pk=pk, user=request.user)
+        except CartItem.DoesNotExist:
+            return Response(
+                {"error": "Cart item not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        cart_item.delete()
+        return Response(
+            {"message": "Item removed from cart"},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+
