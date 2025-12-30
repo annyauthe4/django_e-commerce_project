@@ -469,6 +469,10 @@ p:last-child {
 .widget-header:hover i {
   color: #3167eb;
 }
+.brand-wrap {
+    max-height: 70px;
+    width: auto;
+}
 
 /* desktop only */
 /* desktop only .end */

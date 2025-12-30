@@ -1,12 +1,25 @@
 $(document).ready(function () {
     updateNavbarAuth();
     loadProducts();
+
+
+    $("#applyPriceFilter").on("click", function () {
+        const minPrice = $("#minPrice").val();
+        const maxPrice = $("#maxPrice").val();
+
+
+        loadProducts({
+            min_price: minPrice,
+            max_price: maxPrice
+        });
+    });
 });
 
-function loadProducts() {
+function loadProducts(filters = {}) {
     $.ajax({
         url: API_BASE + "/api/products/",
         method: "GET",
+        data: filters,
         success: function (products) {
             renderProducts(products);
         },
@@ -28,6 +41,15 @@ function loadProducts() {
 
 function renderProducts(products) {
     $("#productGrid").empty();
+
+    if (products.length === 0) {
+        $("#productGrid").html(`
+            <div class="col-12 text-center">
+                <p class="text-muted">No products found.</p>
+            </div>
+        `);
+        return;
+    }
 
     products.forEach(product => {
         const card = `
