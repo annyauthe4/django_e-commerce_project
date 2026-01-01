@@ -1,5 +1,6 @@
 $(document).ready(function () {
     updateNavbarAuth();
+    updateCartCount();
 
     const productId = new URLSearchParams(window.location.search).get("id");
 
@@ -20,10 +21,10 @@ function loadProduct(productId) {
         url: API_BASE + "/api/products/" + productId + "/",
         method: "GET",
         success: function (product) {
-            $("#productName").text(product.name);
-            $("#productPrice").text(product.price);
-            $("#productDescription").text(product.description || "No description available.");
-            $("#productImage").attr("src", product.image);
+            $(".title").text(product.name);
+            $(".price").text(product.price);
+            $(".description").text(product.description || "No description available.");
+            $(".img-big-wrap img").attr("src", product.image);
         },
         error: function () {
             showError("Failed to load product.");
@@ -44,9 +45,11 @@ function addToCart(productId) {
             "Authorization": "Bearer " + getAccessToken()
         },
         data: {
-            product_id: productId
+            product_id: productId,
+            quantity: 1
         },
         success: function () {
+            updateCartCount();
             alert("Product added to cart!");
         },
         error: function () {

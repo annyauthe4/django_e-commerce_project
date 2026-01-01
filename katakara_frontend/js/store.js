@@ -30,7 +30,7 @@ function loadProducts(filters = {}) {
                     id: 1,
                     name: "Sample Product",
                     price: 5000,
-                    image: "images/items/1.jpg",
+                    image: "css/images/items/1.jpg",
                     category: "General"
                 }
             ];
@@ -53,24 +53,26 @@ function renderProducts(products) {
 
     products.forEach(product => {
         const card = `
-            <div class="col-md-3">
-                <div class="card card-product-grid">
-                    <a href="product.html?id=${product.id}" class="img-wrap">
+            <div class="col-md-4">
+                <figure class="card card-product-grid">
+                    <div class="img-wrap">
                         <img src="${product.image}">
-                    </a>
+                    </div>
                     <figcaption class="info-wrap">
-                        <a href="product.html?id=${product.id}" class="title">
-                            ${product.name}
-                        </a>
-                        <div class="price mt-1">
-                            ₦${product.price}
+                        <div class="fix-height">
+                            <a href="product.html?id=${product.id}" class="title">
+                                ${product.name}
+                            </a>
+                            <div class="price mt-2">
+                                <span class="price">₦${product.price}</span>
+                            </div>
                         </div>
-                        <button class="btn btn-sm btn-primary mt-2 add-to-cart"
-                                data-id="${product.id}">
+                       <button class="btn btn-sm btn-primary mt-2 add-to-cart"
+                            data-id="${product.id}">
                             Add to cart
                         </button>
                     </figcaption>
-                </div>
+                </figure>
             </div>
         `;
         $("#productGrid").append(card);

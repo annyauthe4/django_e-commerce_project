@@ -17,7 +17,15 @@ class CartView(APIView):
 
     def post(self, request):
         product_id = request.data.get('product_id')
-        product = Product.objects.get(id=product_id)
+        quantity = int(request.data.get("quantity", 1))
+
+        try:
+            product = Product.objects.get(id=product_id, is_active=True)
+        except Product.DoesNotExist:
+            return Response(
+                {"detail": "Product not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         cart, _ = Cart.objects.get_or_create(user=request.user)
         item, created = CartItem.objects.get_or_create(
@@ -27,9 +35,14 @@ class CartView(APIView):
 
         if not created:
             item.quantity += 1
-            item.save()
+        else:
+            cart_item.quantity = quantity
+        item.save()
 
-        return Response({"message": "Added to cart"})
+        return Response(
+            {"message": "Added to cart"},
+            status=status.HTTP_201_CREATED
+        )
 
 
     def patch(self, request, pk):

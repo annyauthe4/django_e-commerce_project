@@ -1,9 +1,11 @@
+from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import Product
 from .serializers import ProductSerializer
 
 class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Product.objects.filter(is_active=True)
@@ -22,4 +24,4 @@ class ProductListView(ListAPIView):
 class ProductDetailView(RetrieveAPIView):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
-
+    permission_classes = [AllowAny]
